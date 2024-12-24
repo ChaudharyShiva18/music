@@ -1,0 +1,30 @@
+version: '3.9'
+services:
+
+  server:
+    build: ./server
+    container_name: music-downloader-server
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./server:/app
+      - ./music:/music
+
+    depends_on:
+      - client
+    # If you have a shared "music" folder outside or want to persist downloads,
+    # you can mount it as well:
+    #volumes:
+    #   - ./downloads:/app/music
+    # environment:
+    #   - NODE_ENV=production
+
+  client:
+    build: ./client
+    container_name: music-downloader-client
+    ports:
+      - "3000:80" #we'll serve the built React app on port 80 inside the container
+    volumes:
+      - ./client:/usr/src/app
+    # environment:
+    #   - CI=true
